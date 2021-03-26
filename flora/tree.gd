@@ -55,7 +55,7 @@ func start_burning():
 		rset("state", FloraState.BURNING)
 
 func _spread_fire():
-	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position())
+	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position() / PIXEL_PER_TILE)
 	
 	for tree in surrounding_trees:
 		tree.start_burning()
