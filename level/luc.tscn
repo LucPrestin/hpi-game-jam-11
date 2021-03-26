@@ -40,7 +40,7 @@ tile_data = PoolIntArray( 262158, 0, 196611, 1572871, 0, 0, 1572872, 0, 1, 15728
 [node name="tree" parent="trees" instance=ExtResource( 5 )]
 position = Vector2( 16, 32 )
 growth_stage = 3
-is_burning = true
+state = 1
 
 [node name="tree2" parent="trees" instance=ExtResource( 5 )]
 position = Vector2( 32, 32 )

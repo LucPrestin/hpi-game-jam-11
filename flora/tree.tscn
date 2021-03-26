@@ -19,4 +19,4 @@ position = Vector2( 0, -2.5 )
 shape = SubResource( 1 )
 
 [node name="sync" parent="." instance=ExtResource( 2 )]
-synced_properties = PoolStringArray( "position", "growth_stage", "is_burning" )
+synced_properties = PoolStringArray( "position", "growth_stage", "state" )

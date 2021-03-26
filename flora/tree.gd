@@ -2,40 +2,54 @@ extends StaticBody2D
 class_name Flora
 
 const TIME_BETWEEN_SPREADINGS = 3
+const TIME_BURNING = 10
 const TIME_PER_STAGE = 3
 const MAX_GROWTH_STAGE = 3
 const OFFSET = 8
 
 export var growth_stage : int = 1 setget _set_growth_stage
-export var is_burning: bool = false setget _set_burning_state
+enum FloraState { GROWING, BURNING, BURNT }
+export(FloraState) var state = FloraState.GROWING setget _set_state
 
 var time_until_growth = TIME_PER_STAGE
 var time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
-
+var time_until_burnt = TIME_BURNING
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_network_master(1)
 	rset_config("growth_stage", MultiplayerAPI.RPC_MODE_REMOTESYNC)
-	rset_config("is_burning", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset_config("state", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	_set_growth_stage(growth_stage)
-	_set_burning_state(is_burning)
+	_set_state(state)
 
 func _process(delta):
 	if is_network_master():
-		if growth_stage < MAX_GROWTH_STAGE:
-			time_until_growth -= delta
-			if time_until_growth <= 0:
-				time_until_growth = TIME_PER_STAGE
-				rset("growth_stage", growth_stage + 1)
-		if is_burning:
-			time_until_fire_spreads -= delta
-			if time_until_fire_spreads <= 0:
-				time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
-				_spread_fire()
+		match state:
+			FloraState.GROWING:
+				_process_growing(delta)
+			FloraState.BURNING:
+				_process_burning(delta)
+
+func _process_growing(delta):
+	if growth_stage < MAX_GROWTH_STAGE:
+		time_until_growth -= delta
+		if time_until_growth <= 0:
+			time_until_growth = TIME_PER_STAGE
+			rset("growth_stage", growth_stage + 1)
+
+func _process_burning(delta):
+	time_until_fire_spreads -= delta
+	time_until_burnt -= delta
+	if time_until_fire_spreads <= 0:
+		time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
+		_spread_fire()
+	if time_until_burnt <= 0:
+		rset("state", FloraState.BURNT)
 
 func start_burning():
-	rset("is_burning", true)
+	if is_network_master() and state == FloraState.GROWING:
+		rset("state", FloraState.BURNING)
 
 func _spread_fire():
 	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position())
@@ -48,9 +62,11 @@ func _set_growth_stage(new_stage: int):
 	var scale = growth_stage as float / MAX_GROWTH_STAGE as float
 	set_scale(Vector2(scale, scale))
 
-func _set_burning_state(new_burning_state: bool):
-	is_burning = new_burning_state
+func _set_state(new_state):
+	state = new_state
 	_set_surrounding_tiles()
+	if state == FloraState.BURNT:
+		$Sprite.texture = preload("res://resources/flora/tree_burnt_01.png")
 
 func _set_surrounding_tiles():
 	var pos = get_position()
@@ -67,8 +83,11 @@ func _set_surrounding_tiles():
 func _set_tile (x: int, y: int):
 	if Globals.get_level() == null:
 		return
-
-	if is_burning:
-		Globals.get_level().set_dirt_tile(x, y)
-	else:
-		Globals.get_level().set_gras_tile(x, y)
+	
+	match state:
+		FloraState.BURNING:
+			Globals.get_level().set_dirt_tile(x, y)
+		FloraState.GROWING:
+			Globals.get_level().set_gras_tile(x, y)
+		_:
+			pass
