@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/queue.gd" type="Script" id=1]
+
+[node name="queue" type="GridContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 228.943
+margin_top = 88.8359
+margin_right = -283.057
+margin_bottom = -447.164
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

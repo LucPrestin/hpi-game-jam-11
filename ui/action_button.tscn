@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/action_button.gd" type="Script" id=1]
+
+[node name="action_button" type="Button"]
+modulate = Color( 1, 1, 1, 0.960784 )
+self_modulate = Color( 1, 1, 1, 0.678431 )
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 0, 0, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
