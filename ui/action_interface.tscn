@@ -1,0 +1,19 @@
+[gd_scene format=2]
+
+[node name="action_interface" type="CanvasLayer"]
+
+[node name="information" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="time_remaining" type="HScrollBar" parent="information"]
+margin_left = 691.413
+margin_top = 18.8366
+margin_right = 996.413
+margin_bottom = 49.8366
+__meta__ = {
+"_edit_use_anchors_": false
+}
