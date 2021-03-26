@@ -3,15 +3,11 @@
 [ext_resource path="res://player_old/player.gd" type="Script" id=1]
 [ext_resource path="res://resources/hud/Bar_Enemy_Health_Front.png" type="Texture" id=2]
 [ext_resource path="res://player_old/local_camera.gd" type="Script" id=3]
-[ext_resource path="res://resources/heros/player_1.png" type="Texture" id=4]
+[ext_resource path="res://resources/monsters/02.png" type="Texture" id=4]
 [ext_resource path="res://resources/hud/Bar_Enemy_Health_Back.png" type="Texture" id=5]
 [ext_resource path="res://ui/action_button.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/queue.tscn" type="PackedScene" id=7]
 [ext_resource path="res://player_old/player_animator.gd" type="Script" id=8]
-
-
-
-
 
 [sub_resource type="Animation" id=1]
 resource_name = "attack_down"
@@ -414,6 +410,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=13]
 resource_name = "move_down"
 length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -429,6 +426,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=14]
 length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -444,6 +442,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=15]
 length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -460,6 +459,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=16]
 resource_name = "move_up"
 length = 0.4
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -644,14 +644,3 @@ margin_top = -500.0
 margin_right = 200.0
 margin_bottom = -404.0
 columns = 4
-[connection signal="pop_action" from="." to="information/queue" method="_on_pop_action"]
-[connection signal="push_action" from="." to="information/queue" method="_on_push_action"]
-[connection signal="animation_finished" from="animator" to="." method="_on_animator_animation_finished"]
-[connection signal="push_action" from="controls/move_up" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/move_down" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/move_left" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/move_right" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/atk_up" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/atk_down" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/atk_left" to="information/queue" method="_on_push_action"]
-[connection signal="push_action" from="controls/atk_right" to="information/queue" method="_on_push_action"]

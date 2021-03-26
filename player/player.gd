@@ -2,7 +2,6 @@ extends KinematicBody2D
 class_name Player
 
 var id: int setget set_id
-var color: Color setget set_color
 const speed = 200
 
 func _ready():
@@ -12,30 +11,35 @@ func _ready():
 	set_process(true)
 	randomize()
 	position = Vector2(rand_range(0, get_viewport_rect().size.x), rand_range(0, get_viewport_rect().size.y))
-	
-	# pick our color, even though this will be called on all clients, everyone
-	# else's random picks will be overriden by the first sync_state from the master
-	set_color(Color.from_hsv(randf(), 1, 1))
 
 func _process(dt):
-	if is_network_master():
-		if Input.is_action_pressed("ui_up"):
-			rset("position", position + Vector2(0, -speed * dt))
-		if Input.is_action_pressed("ui_down"):
-			rset("position", position + Vector2(0, speed * dt))
-		if Input.is_action_pressed("ui_left"):
-			rset("position", position + Vector2(-speed * dt, 0))
-		if Input.is_action_pressed("ui_right"):
-			rset("position", position + Vector2(speed * dt, 0))
-		if Input.is_action_just_pressed("ui_accept"):
-			rpc("spawn_box", position)
-		if Input.is_mouse_button_pressed(BUTTON_LEFT):
-			var direction = -(position - get_viewport().get_mouse_position()).normalized()
-			rpc("spawn_projectile", position, direction, Uuid.v4())
-
-func set_color(_color: Color):
-	color = _color
-	$sprite.modulate = color
+	if not is_network_master():
+		return
+	
+	var direction =  Vector2(0, 0)
+	if Input.is_action_pressed("ui_up"):
+		direction += Vector2(0, -1)
+	if Input.is_action_pressed("ui_down"):
+		direction += Vector2(0, 1)
+	if Input.is_action_pressed("ui_left"):
+		direction += Vector2(-1, 0)
+	if Input.is_action_pressed("ui_right"):
+		direction += Vector2(1, 0)
+	
+	if not direction.is_equal_approx(Vector2(0, 0)):
+		$animator.set_directionv(direction)
+		$animator.play_directional("move")
+		rset("position", position + direction.normalized() * speed * dt)
+	else:
+		$animator.play_directional("idle")
+	
+	
+	if Input.is_action_just_pressed("ui_accept"):
+		rpc("spawn_box", position)
+	
+	#if Input.is_mouse_button_pressed(BUTTON_LEFT):
+	#	var direction = (get_viewport().get_mouse_position() - position).normalized()
+	#	rpc("spawn_projectile", position, direction, Uuid.v4())
 
 func set_id(new_id: int):
 	set_network_master(new_id)

@@ -1,5 +1,5 @@
 extends Node2D
-class_name Player
+class_name Player_old
 
 var id
 var texture_path: String setget set_texture_path

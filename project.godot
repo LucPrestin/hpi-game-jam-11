@@ -14,14 +14,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://game/client.gd"
 }, {
-"base": "Node2D",
+"base": "KinematicBody2D",
 "class": "Player",
+"language": "GDScript",
+"path": "res://player/player.gd"
+}, {
+"base": "Node2D",
+"class": "Player_old",
 "language": "GDScript",
 "path": "res://player_old/player.gd"
 } ]
 _global_script_class_icons={
 "Client": "",
-"Player": ""
+"Player": "",
+"Player_old": ""
 }
 
 [application]
