@@ -37,7 +37,7 @@ position = Vector2( 32, 32 )
 growth_stage = 3
 
 [node name="tree3" parent="trees" instance=ExtResource( 5 )]
-position = Vector2( 48, 48 )
+position = Vector2( 89.5774, 63.434 )
 growth_stage = 3
 
 [node name="tree4" parent="trees" instance=ExtResource( 5 )]
@@ -45,5 +45,5 @@ position = Vector2( 16, 48 )
 growth_stage = 3
 
 [node name="tree5" parent="trees" instance=ExtResource( 5 )]
-position = Vector2( 32, 64 )
+position = Vector2( 143.818, 88.5685 )
 growth_stage = 3

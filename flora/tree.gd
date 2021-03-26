@@ -7,6 +7,7 @@ const MAX_GROWTH_STAGE = 3
 export var growth_stage : int = 1 setget _set_growth_stage
 var time_until_growth = TIME_PER_STAGE
 var listener = null
+const OFFSET = 8
 
 
 # Called when the node enters the scene tree for the first time.
@@ -31,13 +32,14 @@ func _set_growth_stage(new_stage: int):
 func _set_ground_tile():
 	var level = get_parent().get_parent()
 	var pos = get_position()
-	level.set_gras_tile(Vector2(pos.x-16, pos.y-16))
-	level.set_gras_tile(Vector2(pos.x, pos.y-16))
-	level.set_gras_tile(Vector2(pos.x-16, pos.y))
-	level.set_gras_tile(Vector2(pos.x-16, pos.y+16))
-	level.set_gras_tile(pos)
-	level.set_gras_tile(Vector2(pos.x+16, pos.y-16))
-	level.set_gras_tile(Vector2(pos.x, pos.y+16))
-	level.set_gras_tile(Vector2(pos.x+16, pos.y))
-	level.set_gras_tile(Vector2(pos.x+16, pos.y+16))
+	
+	level.set_gras_tile(pos.x-OFFSET, pos.y-OFFSET)
+	level.set_gras_tile(pos.x, pos.y-OFFSET)
+	level.set_gras_tile(pos.x-OFFSET, pos.y)
+	level.set_gras_tile(pos.x-OFFSET, pos.y+OFFSET)
+	level.set_gras_tilev(pos)
+	level.set_gras_tile(pos.x+OFFSET, pos.y-OFFSET)
+	level.set_gras_tile(pos.x, pos.y+OFFSET)
+	level.set_gras_tile(pos.x+OFFSET, pos.y)
+	level.set_gras_tile(pos.x+OFFSET, pos.y+OFFSET)
 	#+/-16 or +/-8? 16 would change all 9 tiles around tree, but 8 looks better
