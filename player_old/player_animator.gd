@@ -2,19 +2,32 @@ extends AnimationPlayer
 
 var direction = "right"
 
+func _ready():
+	rset_config("direction", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+
 func set_directionv(new_direction: Vector2):
+	if not is_network_master():
+		return
+	
 	match new_direction.normalized().round():
 		Vector2(1, 0):
-			self.direction = "right"
+			rset("direction", "right")
 		Vector2(-1, 0):
-			self.direction = "left"
+			rset("direction", "left")
 		Vector2(0, -1):
-			self.direction = "up"
+			rset("direction", "up")
 		Vector2(0, 1):
-			self.direction = "down"
+			rset("direction", "down")
+
+remote func _play_directional_rpc(animation: String):
+	self.play(animation + '_' + direction)
 
 func play_directional(animation: String):
+	if not is_network_master():
+		return
+	
 	self.play(animation + '_' + direction)
+	rpc("_play_directional_rpc", animation)
 
 func enable_falling_track_for(name: String, value: bool):
 	var animation = self.get_animation(name)

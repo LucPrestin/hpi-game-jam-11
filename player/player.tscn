@@ -474,6 +474,7 @@ tracks/0/keys = {
 radius = 35.7022
 
 [node name="player" type="KinematicBody2D"]
+scale = Vector2( 0.2, 0.2 )
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -504,11 +505,11 @@ anims/move_up = SubResource( 16 )
 script = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2( 2, 2 )
+zoom = Vector2( 0.3, 0.3 )
 script = ExtResource( 4 )
 
 [node name="sync" parent="." instance=ExtResource( 3 )]
-synced_properties = PoolStringArray( "position", "id" )
+synced_properties = PoolStringArray( "position", "id", "texture_path" )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -20 )

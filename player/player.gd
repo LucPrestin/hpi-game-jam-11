@@ -3,7 +3,7 @@ class_name Player
 
 var id: int setget set_id
 var texture_path: String setget _set_texture_path
-const speed = 200
+const speed = 100
 const texture_paths = [
 	"02",
 	"bear",
@@ -15,15 +15,17 @@ const texture_paths = [
 func _ready():
 	add_to_group("players")
 	
-	rset_config("position", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset_config("position", MultiplayerAPI.RPC_MODE_REMOTE)
 	set_process(true)
 	randomize()
-	position = Vector2(rand_range(0, get_viewport_rect().size.x), rand_range(0, get_viewport_rect().size.y))
+	#position = Vector2(rand_range(0, get_viewport_rect().size.x), rand_range(0, get_viewport_rect().size.y))
+
 	
 	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
-	rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
+	if is_network_master():
+		rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
 
-func _process(dt):
+func _physics_process(delta):
 	if not is_network_master():
 		return
 	
@@ -40,7 +42,8 @@ func _process(dt):
 	if not direction.is_equal_approx(Vector2(0, 0)):
 		$animator.set_directionv(direction)
 		$animator.play_directional("move")
-		rset("position", position + direction.normalized() * speed * dt)
+		move_and_slide(direction.normalized() * speed)
+		rset("position", position)
 	else:
 		$animator.play_directional("idle")
 	

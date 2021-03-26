@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/A2_tileset_sheet.png-9597f592f4d3535c6bf5ea2337103d48.stex"
+path="res://.import/tree_10.png-2f330015b170dc1e7f6db3fcac35464a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/tiles/A2_tileset_sheet.png"
-dest_files=[ "res://.import/A2_tileset_sheet.png-9597f592f4d3535c6bf5ea2337103d48.stex" ]
+source_file="res://resources/flora/tree_10.png"
+dest_files=[ "res://.import/tree_10.png-2f330015b170dc1e7f6db3fcac35464a.stex" ]
 
 [params]
 
