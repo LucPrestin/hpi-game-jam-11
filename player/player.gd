@@ -46,14 +46,6 @@ func _physics_process(_delta):
 		rset("position", position)
 	else:
 		$animator.play_directional("idle")
-	
-	
-	if Input.is_action_just_pressed("ui_accept"):
-		rpc("spawn_box", position)
-	
-	#if Input.is_mouse_button_pressed(BUTTON_LEFT):
-	#	var direction = (get_viewport().get_mouse_position() - position).normalized()
-	#	rpc("spawn_projectile", position, direction, Uuid.v4())
 
 func _set_texture_path(new_path: String):
 	texture_path = new_path
@@ -62,21 +54,6 @@ func _set_texture_path(new_path: String):
 func set_id(new_id: int):
 	set_network_master(new_id)
 	id = new_id
-
-remotesync func spawn_projectile(position, direction, name):
-	var projectile = preload("res://examples/physics_projectile/physics_projectile.tscn").instance()
-	projectile.set_network_master(1)
-	projectile.name = name
-	projectile.position = position
-	projectile.direction = direction
-	projectile.owned_by = self
-	get_parent().add_child(projectile)
-	return projectile
-
-remotesync func spawn_box(position):
-	var box = preload("res://examples/block/block.tscn").instance()
-	box.position = position
-	get_parent().add_child(box)
 
 remotesync func kill():
 	hide()
