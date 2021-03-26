@@ -35,25 +35,25 @@ cell_custom_transform = Transform2D( 16, 0, 0, 16, 0, 0 )
 format = 1
 tile_data = PoolIntArray( 262158, 0, 196611, 1572871, 0, 0, 1572872, 0, 1, 1572873, 0, 1, 1572874, 0, 2, 1638407, 0, 65536, 1638408, 0, 65537, 1638409, 0, 65537, 1638410, 0, 131079, 1638411, 0, 1, 1638412, 0, 1, 1638413, 0, 2, 1703943, 0, 131072, 1703944, 0, 131073, 1703945, 0, 131073, 1703946, 0, 9, 1703947, 0, 65537, 1703948, 0, 65537, 1703949, 0, 131079, 1703950, 0, 1, 1703951, 0, 2, 1769482, 0, 131072, 1769483, 0, 131073, 1769484, 0, 131073, 1769485, 0, 9, 1769486, 0, 65537, 1769487, 0, 131079, 1769488, 0, 1, 1769489, 0, 2, 1835021, 0, 131072, 1835022, 0, 131073, 1835023, 0, 9, 1835024, 0, 65537, 1835025, 0, 131079, 1835026, 0, 2, 1900559, 0, 131072, 1900560, 0, 131073, 1900561, 0, 9, 1900562, 0, 131079, 1900563, 0, 1, 1900564, 0, 1, 1900565, 0, 1, 1900566, 0, 2, 1966097, 0, 131072, 1966098, 0, 131073, 1966099, 0, 9, 1966100, 0, 65537, 1966101, 0, 65537, 1966102, 0, 131079, 1966103, 0, 1, 1966104, 0, 2, 2031635, 0, 131072, 2031636, 0, 131073, 2031637, 0, 9, 2031638, 0, 65537, 2031639, 0, 65537, 2031640, 0, 131079, 2031641, 0, 2, 2097173, 0, 131072, 2097174, 0, 131073, 2097175, 0, 9, 2097176, 0, 7, 2097177, 0, 131074, 2162711, 0, 131072, 2162712, 0, 131074 )
 
-[node name="trees" type="Node2D" parent="."]
+[node name="forest" type="Node2D" parent="."]
 
-[node name="tree" parent="trees" instance=ExtResource( 5 )]
+[node name="tree" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 16, 32 )
 growth_stage = 3
 state = 1
 
-[node name="tree2" parent="trees" instance=ExtResource( 5 )]
+[node name="tree2" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 32, 32 )
 growth_stage = 3
 
-[node name="tree3" parent="trees" instance=ExtResource( 5 )]
+[node name="tree3" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 48, 48 )
 growth_stage = 3
 
-[node name="tree4" parent="trees" instance=ExtResource( 5 )]
+[node name="tree4" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 16, 48 )
 growth_stage = 3
 
-[node name="tree5" parent="trees" instance=ExtResource( 5 )]
+[node name="tree5" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 32, 64 )
 growth_stage = 3

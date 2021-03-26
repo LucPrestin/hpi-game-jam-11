@@ -14,7 +14,7 @@ func _ready():
 func get_surrounding_trees(position: Vector2):
 	var surrounding_trees = []
 	
-	for tree in $trees.get_children():
+	for tree in $forest.get_children():
 		var tree_position = tree.get_position() / PIXEL_PER_TILE
 		if position.distance_to(tree_position) <= SURROUNDING_TILE_RANGE:
 			surrounding_trees.append(tree)
