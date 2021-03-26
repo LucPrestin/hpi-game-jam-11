@@ -37,14 +37,14 @@ func _ready():
 		switch_level(default_level)
 
 func switch_level(level_path: String):
-	$level.set_level(level_path)
+	$level_switch.set_level(level_path)
 	
 	for client in clients:
 		spawn_new_player(client.id)
 
 func spawn_new_player(id: int):
 	# inform all our players about the new player
-	var new_player = spawn_object(String(id), $level.get_path(), "res://player/player.tscn", {})
+	var new_player = spawn_object(String(id), $level_switch.get_path(), "res://player/player.tscn", {})
 	new_player.id = id
 	spawn_object_on_clients(new_player)
 
@@ -86,12 +86,12 @@ func server_client_connected(id: int):
 	if id != 1:
 		print("Connected ", id)
 		register_client(id)
-		spawn_object_for(id, $level)
+		spawn_object_for(id, $level_switch)
 		
 		# get our new player informed about all the old players and objects
 		for node in get_tree().get_nodes_in_group("synced"):
 			# Take care not to sync the level twice, otherwise the level gets loaded twice
-			if node != $level:
+			if node != $level_switch:
 				spawn_object_for(id, node)
 		
 		spawn_new_player(id)
@@ -123,4 +123,4 @@ remote func spawn_object(name: String, parent_path: NodePath, filename: String, 
 	return object
 
 remotesync func unregister_player(player_id: int):
-	$level.remove_child($level.get_node(String(player_id)))
+	$level_switch.remove_child($level_switch.get_node(String(player_id)))

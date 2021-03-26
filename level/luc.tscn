@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://resources/tiles/desert.tres" type="TileSet" id=1]
-[ext_resource path="res://resources/tiles/dirt_on_ground.tres" type="TileSet" id=2]
+[ext_resource path="res://resources/tiles/dirt_tiles.tres" type="TileSet" id=2]
 [ext_resource path="res://level/level.gd" type="Script" id=3]
 [ext_resource path="res://resources/tiles/gras_on_ground.tres" type="TileSet" id=4]
 [ext_resource path="res://flora/tree.tscn" type="PackedScene" id=5]
@@ -24,21 +24,22 @@ format = 1
 [node name="dirt_layer" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 16, 16 )
-cell_custom_transform = Transform2D( 16, 0, 0, 16, 0, 0 )
 format = 1
+tile_data = PoolIntArray( 65530, 1, 196611 )
 
 [node name="trees" type="Node2D" parent="."]
 
 [node name="tree" parent="trees" instance=ExtResource( 5 )]
 position = Vector2( 16, 32 )
 growth_stage = 3
+is_burning = true
 
 [node name="tree2" parent="trees" instance=ExtResource( 5 )]
 position = Vector2( 32, 32 )
 growth_stage = 3
 
 [node name="tree3" parent="trees" instance=ExtResource( 5 )]
-position = Vector2( 89.5774, 63.434 )
+position = Vector2( 48, 48 )
 growth_stage = 3
 
 [node name="tree4" parent="trees" instance=ExtResource( 5 )]
@@ -46,5 +47,5 @@ position = Vector2( 16, 48 )
 growth_stage = 3
 
 [node name="tree5" parent="trees" instance=ExtResource( 5 )]
-position = Vector2( 143.818, 88.5685 )
+position = Vector2( 32, 64 )
 growth_stage = 3
