@@ -26,18 +26,15 @@ func get_surrounding_trees(position: Vector2):
 	
 	return surrounding_trees
 
-func set_gras_tile(x: int, y: int):
-	_set_tile(get_node("gras_layer") as TileMap, x, y)
+func set_tile(position: Vector2, tile):
+	match tile:
+		Globals.Tile.GRAS:
+			_set_tile($gras_layer, position)
+		Globals.Tile.DIRT:
+			_set_tile($dirt_layer, position)
 
-func set_dirt_tile(x: int, y: int):
-	_set_tile(get_node("dirt_layer") as TileMap, x, y)
-
-func _set_tile(tileMap: TileMap, x: int, y: int):
-	var position = Vector2(x, y)
-	position = position / tile_pixel_factor
-	
-	var desert = get_node("desert_layer") as TileMap
-	if desert.get_cellv(position) == TileMap.INVALID_CELL:
+func _set_tile(tileMap: TileMap, position: Vector2):
+	if $desert_layer.get_cellv(position) == TileMap.INVALID_CELL:
 		return
 	
 	tileMap.set_cellv(position, 0)
