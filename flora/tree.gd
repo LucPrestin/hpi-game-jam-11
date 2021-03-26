@@ -5,7 +5,10 @@ const TIME_BETWEEN_SPREADINGS = 3
 const TIME_BURNING = 10
 const TIME_PER_STAGE = 3
 const MAX_GROWTH_STAGE = 3
-const OFFSET = 8
+const GRAS_RADIUS = 3
+const BURNT_RADIUS = 3
+
+const PIXEL_PER_TILE = 16
 
 export var growth_stage : int = 1 setget _set_growth_stage
 enum FloraState { GROWING, BURNING, BURNT }
@@ -67,27 +70,19 @@ func _set_state(new_state):
 	_set_surrounding_tiles()
 	if state == FloraState.BURNT:
 		$Sprite.texture = preload("res://resources/flora/tree_burnt_01.png")
+	$Particles2D.emitting = state == FloraState.BURNING
 
 func _set_surrounding_tiles():
-	var pos = get_position()
-	
-	var offset_multiplier_x = -1
-	var offset_multiplier_y = -1
-	
-	while offset_multiplier_x <= 1:
-		while offset_multiplier_y <= 1:
-			_set_tile(pos.x + OFFSET * offset_multiplier_x, pos.y + OFFSET * offset_multiplier_y)
-			offset_multiplier_y += 1
-		offset_multiplier_x += 1
-
-func _set_tile (x: int, y: int):
 	if Globals.get_level() == null:
 		return
 	
-	match state:
-		FloraState.BURNING:
-			Globals.get_level().set_dirt_tile(x, y)
-		FloraState.GROWING:
-			Globals.get_level().set_gras_tile(x, y)
-		_:
-			pass
+	if state != FloraState.BURNING and state != FloraState.GROWING:
+		return
+	
+	var pos = get_position() / PIXEL_PER_TILE
+		
+	var radius = BURNT_RADIUS if state == FloraState.BURNING else GRAS_RADIUS
+	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNING else Globals.Tile.GRAS
+	for x_offset in range(-radius, radius):
+		for y_offset in range(-radius, radius):
+			Globals.get_level().set_tile(pos + Vector2(x_offset, y_offset), tile_type)

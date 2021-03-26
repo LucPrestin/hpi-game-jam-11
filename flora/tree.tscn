@@ -1,11 +1,45 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://resources/flora/tree_02.png" type="Texture" id=1]
 [ext_resource path="res://sync/sync.tscn" type="PackedScene" id=2]
 [ext_resource path="res://flora/tree.gd" type="Script" id=3]
+[ext_resource path="res://resources/fire.png" type="Texture" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.8895
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.288636 ), 0.0, 0.0, 0, 0, Vector2( 0.487395, 0.985227 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.557954 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.13
+emission_shape = 2
+emission_box_extents = Vector3( 6, 10, 5 )
+flag_disable_z = true
+direction = Vector3( 0, -0.1, 0 )
+spread = 14.17
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.5
+initial_velocity_random = 0.52
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 0.5
+linear_accel_random = 0.5
+scale = 0.03
+scale_curve = SubResource( 4 )
+hue_variation = 0.02
+hue_variation_random = 1.0
+anim_speed = 6.28
+anim_offset_random = 0.34
 
 [node name="tree" type="StaticBody2D"]
 script = ExtResource( 3 )
@@ -20,3 +54,12 @@ shape = SubResource( 1 )
 
 [node name="sync" parent="." instance=ExtResource( 2 )]
 synced_properties = PoolStringArray( "position", "growth_stage", "state" )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+material = SubResource( 2 )
+position = Vector2( -0.468216, -7.00339 )
+emitting = false
+amount = 5
+lifetime = 5.0
+process_material = SubResource( 5 )
+texture = ExtResource( 4 )
