@@ -1,7 +1,7 @@
 extends StaticBody2D
 class_name Flora
 
-const TIME_BETWEEN_SPREADINGS = 3
+const TIME_BETWEEN_SPREADINGS = 7
 const TIME_BURNING = 10
 const TIME_PER_STAGE = 3
 const MAX_GROWTH_STAGE = 3
@@ -53,6 +53,9 @@ func _process_burning(delta):
 func start_burning():
 	if is_network_master() and state == FloraState.GROWING:
 		rset("state", FloraState.BURNING)
+		
+func can_pick_up():
+	return state == FloraState.GROWING and growth_stage == MAX_GROWTH_STAGE
 
 func _spread_fire():
 	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position() / PIXEL_PER_TILE)
