@@ -4,7 +4,7 @@
 [ext_resource path="res://player_old/player_animator.gd" type="Script" id=2]
 [ext_resource path="res://sync/sync.tscn" type="PackedScene" id=3]
 [ext_resource path="res://player_old/local_camera.gd" type="Script" id=4]
-[ext_resource path="res://resources/monsters/02.png" type="Texture" id=5]
+[ext_resource path="res://resources/monsters/bear.png" type="Texture" id=5]
 
 [sub_resource type="Animation" id=1]
 resource_name = "attack_down"
