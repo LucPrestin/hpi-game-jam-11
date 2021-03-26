@@ -76,13 +76,13 @@ func _set_surrounding_tiles():
 	if Globals.get_level() == null:
 		return
 	
-	if state != FloraState.BURNING and state != FloraState.GROWING:
+	if state != FloraState.BURNT and state != FloraState.GROWING:
 		return
 	
 	var pos = get_position() / PIXEL_PER_TILE
 		
-	var radius = BURNT_RADIUS if state == FloraState.BURNING else GRAS_RADIUS
-	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNING else Globals.Tile.GRAS
+	var radius = BURNT_RADIUS if state == FloraState.BURNT else GRAS_RADIUS
+	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNT else Globals.Tile.GRAS
 	for x_offset in range(-radius, radius):
 		for y_offset in range(-radius, radius):
 			Globals.get_level().set_tile(pos + Vector2(x_offset, y_offset), tile_type)
