@@ -11,6 +11,14 @@ func _ready():
 #func _process(delta):
 #	pass
 
+master func place_tree(position: Vector2):
+	var new_tree = load("res://flora/tree.tscn").instance()
+	new_tree.position = position
+	new_tree.growth_stage = 1
+	Globals.get_level().get_node("forest").add_child(new_tree)
+	
+	Globals.get_game().spawn_object_on_clients(new_tree)
+
 func get_forest():
 	return $forest.get_children()
 
