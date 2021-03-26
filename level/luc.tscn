@@ -24,6 +24,7 @@ format = 1
 [node name="dirt_layer" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 16, 16 )
+cell_custom_transform = Transform2D( 16, 0, 0, 16, 0, 0 )
 format = 1
 
 [node name="trees" type="Node2D" parent="."]

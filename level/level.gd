@@ -14,8 +14,7 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func set_gras_tilev(position: Vector2):
-	_set_tilev(get_node("gras_layer") as TileMap, position)
+
 
 func set_gras_tile(x: int, y: int):
 	_set_tile(get_node("gras_layer") as TileMap, x, y)
@@ -23,13 +22,8 @@ func set_gras_tile(x: int, y: int):
 func set_dirt_tile(x: int, y: int):
 	_set_tile(get_node("dirt_layer") as TileMap, x, y)
 
-func set_dirt_tilev(position: Vector2):
-	_set_tilev(get_node("dirt_layer") as TileMap, position)
-
 func _set_tile(tileMap: TileMap, x: int, y: int):
-	_set_tilev(tileMap, Vector2(x, y))
-
-func _set_tilev(tileMap: TileMap, position: Vector2):
+	var position = Vector2(x, y)
 	position = position / tile_pixel_factor
 	tileMap.set_cellv(position, 0)
 	tileMap.update_bitmask_area(position)
