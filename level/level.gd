@@ -11,6 +11,9 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func get_forest():
+	return $forest.get_children()
+
 func get_surrounding_trees(position: Vector2):
 	var surrounding_trees = []
 	
