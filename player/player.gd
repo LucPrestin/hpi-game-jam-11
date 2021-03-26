@@ -2,7 +2,15 @@ extends KinematicBody2D
 class_name Player
 
 var id: int setget set_id
+var texture_path: String setget _set_texture_path
 const speed = 200
+const texture_paths = [
+	"02",
+	"bear",
+	"bee",
+	"bat",
+	"28"
+	]
 
 func _ready():
 	add_to_group("players")
@@ -11,6 +19,9 @@ func _ready():
 	set_process(true)
 	randomize()
 	position = Vector2(rand_range(0, get_viewport_rect().size.x), rand_range(0, get_viewport_rect().size.y))
+	
+	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
 
 func _process(dt):
 	if not is_network_master():
@@ -40,6 +51,10 @@ func _process(dt):
 	#if Input.is_mouse_button_pressed(BUTTON_LEFT):
 	#	var direction = (get_viewport().get_mouse_position() - position).normalized()
 	#	rpc("spawn_projectile", position, direction, Uuid.v4())
+
+func _set_texture_path(new_path: String):
+	texture_path = new_path
+	$Sprite.texture = load(self.texture_path)
 
 func set_id(new_id: int):
 	set_network_master(new_id)
