@@ -7,7 +7,7 @@
 [ext_resource path="res://resources/hud/Bar_Enemy_Health_Back.png" type="Texture" id=5]
 [ext_resource path="res://ui/action_button.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/queue.tscn" type="PackedScene" id=7]
-[ext_resource path="res://player_old/player_animator.gd" type="Script" id=8]
+[ext_resource path="res://player/player_animator.gd" type="Script" id=8]
 
 [sub_resource type="Animation" id=1]
 resource_name = "attack_down"

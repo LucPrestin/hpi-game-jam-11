@@ -25,7 +25,7 @@ func _ready():
 	if is_network_master():
 		rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if not is_network_master():
 		return
 	
