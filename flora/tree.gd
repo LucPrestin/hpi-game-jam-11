@@ -8,8 +8,6 @@ const MAX_GROWTH_STAGE = 3
 const GRAS_RADIUS = 3
 const BURNT_RADIUS = 3
 
-const PIXEL_PER_TILE = 16
-
 export var growth_stage : int = 1 setget _set_growth_stage
 enum FloraState { GROWING, BURNING, BURNT }
 export(FloraState) var state = FloraState.GROWING setget _set_state
@@ -58,7 +56,7 @@ func can_pick_up():
 	return state == FloraState.GROWING and growth_stage == MAX_GROWTH_STAGE
 
 func _spread_fire():
-	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position() / PIXEL_PER_TILE)
+	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position() / Globals.PIXEL_PER_TILE)
 	
 	for tree in surrounding_trees:
 		tree.start_burning()
@@ -82,7 +80,7 @@ func _set_surrounding_tiles():
 	if state != FloraState.BURNT and state != FloraState.GROWING:
 		return
 	
-	var pos = get_position() / PIXEL_PER_TILE
+	var pos = get_position() / Globals.PIXEL_PER_TILE
 		
 	var radius = BURNT_RADIUS if state == FloraState.BURNT else GRAS_RADIUS
 	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNT else Globals.Tile.GRAS

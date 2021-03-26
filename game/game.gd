@@ -45,7 +45,10 @@ func switch_level(level_path: String):
 func spawn_new_player(id: int):
 	# inform all our players about the new player
 	var new_player = spawn_object(String(id), $level_switch.get_path(), "res://player/player.tscn", {})
+	
+	new_player.position = get_tree().get_root().find_node("spawn", true, false).get_position()
 	new_player.id = id
+	
 	spawn_object_on_clients(new_player)
 
 func sync_state_for(object: Node):

@@ -1,6 +1,5 @@
 extends Node2D
 
-const PIXEL_PER_TILE = 16
 const SURROUNDING_TILE_RANGE = 2
 
 # Called when the node enters the scene tree for the first time.
@@ -18,7 +17,7 @@ func get_surrounding_trees(position: Vector2):
 	var surrounding_trees = []
 	
 	for tree in $forest.get_children():
-		var tree_position = tree.get_position() / PIXEL_PER_TILE
+		var tree_position = tree.get_position() / Globals.PIXEL_PER_TILE
 		if position.distance_to(tree_position) <= SURROUNDING_TILE_RANGE:
 			surrounding_trees.append(tree)
 	

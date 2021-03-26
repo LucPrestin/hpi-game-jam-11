@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://resources/tiles/desert.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tiles/dirt_tiles.tres" type="TileSet" id=2]
@@ -7,9 +7,13 @@
 [ext_resource path="res://flora/tree.tscn" type="PackedScene" id=5]
 [ext_resource path="res://resources/tiles/river_tiles.tres" type="TileSet" id=6]
 [ext_resource path="res://resources/tiles/goal_tiles.tres" type="TileSet" id=7]
+[ext_resource path="res://spawn/spawn.tscn" type="PackedScene" id=8]
 
 [node name="level" type="Node2D"]
 script = ExtResource( 3 )
+
+[node name="spawn" parent="." instance=ExtResource( 8 )]
+position = Vector2( 80, 80 )
 
 [node name="desert_layer" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
