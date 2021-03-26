@@ -6,7 +6,7 @@ var texture_path: String setget _set_texture_path
 
 enum Item { EMPTY, TREE }
 var inventory_item = Item.EMPTY setget _set_item
-enum Action { IDLE, PICKUP }
+enum Action { IDLE, PICKUP, PLACE }
 var action = Action.IDLE
 
 const SPEED = 100
@@ -66,6 +66,8 @@ func try_interact():
 	match inventory_item:
 		Item.EMPTY:
 			try_pickup()
+		Item.TREE:
+			try_place()
 
 func try_pickup():
 	var closest_tree = null
@@ -81,7 +83,13 @@ func try_pickup():
 	if closest_distance < PICKUP_DISTANCE:
 		action = Action.PICKUP
 		$PickupTimer.start()
-		rpc("play_pickup_animation",  closest_tree.get_global_transform().origin - get_global_transform().origin)
+		rpc_unreliable("play_pickup_animation",  closest_tree.get_global_transform().origin - get_global_transform().origin)
+
+func try_place():
+	# TODO
+	action = Action.PLACE
+	$PickupTimer.start()
+	rpc_unreliable("play_pickup_animation", Vector2(1, 0))
 
 remotesync func play_pickup_animation(direction: Vector2):
 	$animator.set_directionv(direction)
@@ -106,7 +114,18 @@ func set_id(new_id: int):
 remotesync func kill():
 	hide()
 
+func finish_place():
+	rset("inventory_item", Item.EMPTY)
+	Globals.get_level().rpc("place_tree", get_global_transform().origin)
+
+func finish_pickup():
+	rset("inventory_item", Item.TREE)
 
 func _on_PickupTimer_timeout():
-	rset("inventory_item", Item.TREE)
+	match action:
+		Action.PLACE:
+			finish_place()
+		Action.PICKUP:
+			finish_pickup()
+	
 	action = Action.IDLE
