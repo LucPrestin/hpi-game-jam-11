@@ -30,4 +30,13 @@ func _set_growth_stage(new_stage: int):
 
 func _set_ground_tile():
 	var level = get_parent().get_parent()
-	level.set_gras_tile(get_position())
+	var pos = get_position()
+	level.set_gras_tile(Vector2(pos.x-1, pos.y-1))
+	level.set_gras_tile(Vector2(pos.x, pos.y-1))
+	level.set_gras_tile(Vector2(pos.x-1, pos.y))
+	level.set_gras_tile(Vector2(pos.x-1, pos.y+1))
+	level.set_gras_tile(pos)
+	level.set_gras_tile(Vector2(pos.x+1, pos.y-1))
+	level.set_gras_tile(Vector2(pos.x, pos.y+1))
+	level.set_gras_tile(Vector2(pos.x+1, pos.y))
+	level.set_gras_tile(Vector2(pos.x+1, pos.y+1))
