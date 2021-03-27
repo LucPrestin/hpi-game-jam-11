@@ -73,5 +73,8 @@ func win():
 	print("Win, hurray")
 
 master func check_win_condition():
-	if len(Globals.get_players()) == len($goal.get_overlapping_bodies()):
-		win()
+	for player in Globals.get_players():
+		if !$goal.overlaps_body(player):
+			return
+	
+	win()
