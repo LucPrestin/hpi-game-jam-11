@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tree_burnt_05.png-87cbaa2b2d1f940320495ed30988df86.stex"
+path="res://.import/flower_12.png-3a177b1278be2b94df786108c55d5e31.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/flora/tree_burnt_05.png"
-dest_files=[ "res://.import/tree_burnt_05.png-87cbaa2b2d1f940320495ed30988df86.stex" ]
+source_file="res://resources/flora/flower_12.png"
+dest_files=[ "res://.import/flower_12.png-3a177b1278be2b94df786108c55d5e31.stex" ]
 
 [params]
 

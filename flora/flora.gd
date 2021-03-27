@@ -8,21 +8,29 @@ const MAX_GROWTH_STAGE = 3
 const GRAS_RADIUS = 3
 const BURNT_RADIUS = 3
 
-export var growth_stage : int = 1 setget _set_growth_stage
+export var growth_stage : int = 3 setget _set_growth_stage
+
 enum FloraState { GROWING, BURNING, BURNT }
+
+export(Globals.PlantType) var type = Globals.PlantType.TREE setget _set_plant_type
 export(FloraState) var state = FloraState.GROWING setget _set_state
 
 var time_until_growth = TIME_PER_STAGE
 var time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
 var time_until_burnt = TIME_BURNING
 
+var texture_path: String setget _set_texture_path
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_network_master(1)
 	rset_config("growth_stage", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	rset_config("state", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	_set_growth_stage(growth_stage)
 	_set_state(state)
+	if is_network_master():
+		update_texture()
 
 func _process(delta):
 	if is_network_master():
@@ -46,12 +54,33 @@ func _process_burning(delta):
 		time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
 		_spread_fire()
 	if time_until_burnt <= 0:
-		rset("state", FloraState.BURNT)
+		_burnt()
+
+func _burnt():
+	rset("state", FloraState.BURNT)
+	rset("texture_path", _information().get_burnt_texture())
+
+func _information():
+	match type:
+		Globals.PlantType.TREE:
+			return TreeInformation
+		Globals.PlantType.FLOWER:
+			return FlowerInformation
+
+func update_texture():
+	match state:
+		FloraState.BURNT:
+			_set_texture_path(_information().get_burnt_texture())
+		FloraState.GROWING, FloraState.BURNING:
+			_set_texture_path(_information().get_healthy_texture())
+
+func _set_plant_type(new_plant_type):
+	type = new_plant_type
 
 func start_burning():
 	if is_network_master() and state == FloraState.GROWING:
 		rset("state", FloraState.BURNING)
-		
+
 func can_pick_up():
 	return state == FloraState.GROWING and growth_stage == MAX_GROWTH_STAGE
 
@@ -69,8 +98,6 @@ func _set_growth_stage(new_stage: int):
 func _set_state(new_state):
 	state = new_state
 	_set_surrounding_tiles()
-	if state == FloraState.BURNT:
-		$Sprite.texture = preload("res://resources/flora/tree_burnt_01.png")
 	$Particles2D.emitting = state == FloraState.BURNING
 
 func _set_surrounding_tiles():
@@ -87,3 +114,7 @@ func _set_surrounding_tiles():
 	for x_offset in range(-radius, radius):
 		for y_offset in range(-radius, radius):
 			Globals.get_level().set_tile(pos + Vector2(x_offset, y_offset), tile_type)
+
+func _set_texture_path(path: String):
+	texture_path = path
+	$Sprite.texture = load(texture_path)

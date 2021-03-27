@@ -4,7 +4,7 @@
 [ext_resource path="res://resources/tiles/dirt_tiles.tres" type="TileSet" id=2]
 [ext_resource path="res://level/level.gd" type="Script" id=3]
 [ext_resource path="res://resources/tiles/gras_on_ground.tres" type="TileSet" id=4]
-[ext_resource path="res://flora/tree.tscn" type="PackedScene" id=5]
+[ext_resource path="res://flora/flora.tscn" type="PackedScene" id=5]
 [ext_resource path="res://resources/tiles/river_tiles.tres" type="TileSet" id=6]
 [ext_resource path="res://resources/tiles/goal_tiles.tres" type="TileSet" id=7]
 [ext_resource path="res://spawn/spawn.tscn" type="PackedScene" id=8]
@@ -311,6 +311,7 @@ position = Vector2( 331, 77.4932 )
 
 [node name="tree158" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 117.595, 137.5 )
+type = 1
 
 [node name="tree159" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 239.532, 81.9966 )

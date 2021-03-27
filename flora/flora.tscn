@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://resources/flora/tree_02.png" type="Texture" id=1]
+[ext_resource path="res://resources/flora/tree_2.png" type="Texture" id=1]
 [ext_resource path="res://sync/sync.tscn" type="PackedScene" id=2]
-[ext_resource path="res://flora/tree.gd" type="Script" id=3]
+[ext_resource path="res://flora/flora.gd" type="Script" id=3]
 [ext_resource path="res://resources/fire.png" type="Texture" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -41,7 +41,7 @@ hue_variation_random = 1.0
 anim_speed = 6.28
 anim_offset_random = 0.34
 
-[node name="tree" type="StaticBody2D"]
+[node name="flora" type="StaticBody2D"]
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -53,7 +53,7 @@ position = Vector2( 0, -2.5 )
 shape = SubResource( 1 )
 
 [node name="sync" parent="." instance=ExtResource( 2 )]
-synced_properties = PoolStringArray( "position", "growth_stage", "state" )
+synced_properties = PoolStringArray( "position", "growth_stage", "state", "type", "texture_path" )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 material = SubResource( 2 )

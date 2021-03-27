@@ -17,7 +17,12 @@ _global_script_classes=[ {
 "base": "StaticBody2D",
 "class": "Flora",
 "language": "GDScript",
-"path": "res://flora/tree.gd"
+"path": "res://flora/flora.gd"
+}, {
+"base": "Object",
+"class": "FlowerInformation",
+"language": "GDScript",
+"path": "res://flora/flower_information.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "Player",
@@ -28,12 +33,19 @@ _global_script_classes=[ {
 "class": "Player_old",
 "language": "GDScript",
 "path": "res://player_old/player.gd"
+}, {
+"base": "Object",
+"class": "TreeInformation",
+"language": "GDScript",
+"path": "res://flora/tree_information.gd"
 } ]
 _global_script_class_icons={
 "Client": "",
 "Flora": "",
+"FlowerInformation": "",
 "Player": "",
-"Player_old": ""
+"Player_old": "",
+"TreeInformation": ""
 }
 
 [application]

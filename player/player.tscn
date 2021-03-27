@@ -5,7 +5,7 @@
 [ext_resource path="res://sync/sync.tscn" type="PackedScene" id=3]
 [ext_resource path="res://player_old/local_camera.gd" type="Script" id=4]
 [ext_resource path="res://resources/monsters/bear.png" type="Texture" id=5]
-[ext_resource path="res://resources/flora/tree_02.png" type="Texture" id=6]
+[ext_resource path="res://resources/flora/tree_2.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=1]
 length = 0.235294
