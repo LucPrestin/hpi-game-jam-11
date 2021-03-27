@@ -68,3 +68,14 @@ func _set_tile(tileMap: TileMap, position: Vector2):
 	
 	tileMap.set_cellv(position, 0)
 	tileMap.update_bitmask_area(position)
+
+func win():
+	pass
+
+master func check_win_condition():
+	var all_players_in_goal_region = true
+	for child in get_children():
+		print(child)
+	
+	if all_players_in_goal_region:
+		win()
