@@ -76,6 +76,8 @@ func update_texture():
 
 func _set_plant_type(new_plant_type):
 	type = new_plant_type
+	set_collision_mask_bit(0, _information().can_collide())
+	set_collision_layer_bit(0, _information().can_collide())
 
 func start_burning():
 	if is_network_master() and state == FloraState.GROWING:
