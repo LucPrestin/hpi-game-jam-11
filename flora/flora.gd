@@ -8,8 +8,7 @@ const MAX_GROWTH_STAGE = 3
 const GRAS_RADIUS = 3
 const BURNT_RADIUS = 3
 
-# set standard growth state of green tree and flowers to 3
-export var growth_stage : int = 1 setget _set_growth_stage
+export var growth_stage : int = 3 setget _set_growth_stage
 
 enum FloraState { GROWING, BURNING, BURNT }
 
@@ -31,7 +30,7 @@ func _ready():
 	_set_growth_stage(growth_stage)
 	_set_state(state)
 	if is_network_master():
-		rset("texture_path", _textures().get_healthy_texture())
+		update_texture()
 
 func _process(delta):
 	if is_network_master():
@@ -68,14 +67,15 @@ func _textures():
 		Globals.PlantType.FLOWER:
 			return FlowerTextures
 
+func update_texture():
+	match state:
+		FloraState.BURNT:
+			_set_texture_path(_textures().get_burnt_texture())
+		FloraState.GROWING, FloraState.BURNING:
+			_set_texture_path(_textures().get_healthy_texture())
+
 func _set_plant_type(new_plant_type):
 	type = new_plant_type
-	if is_network_master():
-		match state:
-			FloraState.BURNT:
-				texture_path = _textures().get_burnt_texture()
-			FloraState.GROWING:
-				texture_path = _textures().get_healthy_texture()
 
 func start_burning():
 	if is_network_master() and state == FloraState.GROWING:

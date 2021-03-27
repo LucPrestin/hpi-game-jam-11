@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/A1_tileset_sheet.png-d6a69a0e2bc4982b0d346a72296fab42.stex"
+path="res://.import/small_stone4.png-9d3901242d1e12214addd42c7eefb05e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/tiles/A1_tileset_sheet.png"
-dest_files=[ "res://.import/A1_tileset_sheet.png-d6a69a0e2bc4982b0d346a72296fab42.stex" ]
+source_file="res://resources/obstacles/small_stone4.png"
+dest_files=[ "res://.import/small_stone4.png-9d3901242d1e12214addd42c7eefb05e.stex" ]
 
 [params]
 

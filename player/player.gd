@@ -1,15 +1,9 @@
 extends KinematicBody2D
 class_name Player
 
-var id: int setget set_id
-var texture_path: String setget _set_texture_path
-
-enum Item { EMPTY, TREE, FLOWER }
-var inventory_item = Item.EMPTY setget _set_item
-enum Action { IDLE, PICKUP_TREE, PICKUP_FLOWER, PLACE }
-var action = Action.IDLE
-
 const SPEED = 100
+const SWEATING_SPEED = 40
+const TIME_SWEATING = 5
 const PICKUP_DISTANCE = 16 * 1.5
 const texture_paths = [
 	"02",
@@ -17,13 +11,27 @@ const texture_paths = [
 	"bee",
 	"bat",
 	"28"
-	]
+]
+
+var id: int setget set_id
+var texture_path: String setget _set_texture_path
+var direction: Vector2 = Vector2(1, 0)
+var sweating: bool = false setget _set_sweating
+var time_until_death = TIME_SWEATING
+
+enum Item { EMPTY, TREE, FLOWER }
+var inventory_item = Item.EMPTY setget _set_item
+enum Action { IDLE, PICKUP_TREE, PICKUP_FLOWER, PLACE, DYING }
+var action = Action.IDLE
+
+
 
 func _ready():
 	add_to_group("players")
 	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	rset_config("position", MultiplayerAPI.RPC_MODE_REMOTE)
 	rset_config("inventory_item", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset_config("sweating", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	
 	$InventoryItem.visible = false
 	
@@ -33,9 +41,22 @@ func _ready():
 	if is_network_master():
 		rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
 
-func _physics_process(_delta):
+func _should_sweat():
+	var position = get_global_transform().origin
+	return Globals.get_level().is_burnt(position) or not Globals.get_level().has_gras(position)
+
+func _physics_process(delta):
 	if not is_network_master():
 		return
+	
+	var should_sweat = _should_sweat()
+	if sweating != should_sweat and action != Action.DYING:
+		rset("sweating", should_sweat)
+	
+	if sweating:
+		_sweat(delta)
+	else:
+		time_until_death = TIME_SWEATING
 	
 	if action != Action.IDLE:
 		return
@@ -44,23 +65,39 @@ func _physics_process(_delta):
 		try_interact()
 		return
 	
-	var direction =  Vector2(0, 0)
+	var new_direction =  Vector2(0, 0)
 	if Input.is_action_pressed("move_up"):
-		direction += Vector2(0, -1)
+		new_direction += Vector2(0, -1)
 	if Input.is_action_pressed("move_down"):
-		direction += Vector2(0, 1)
+		new_direction += Vector2(0, 1)
 	if Input.is_action_pressed("move_left"):
-		direction += Vector2(-1, 0)
+		new_direction += Vector2(-1, 0)
 	if Input.is_action_pressed("move_right"):
-		direction += Vector2(1, 0)
+		new_direction += Vector2(1, 0)
 	
-	if not direction.is_equal_approx(Vector2(0, 0)):
+	if not new_direction.is_equal_approx(Vector2(0, 0)):
+		direction = new_direction.normalized()
 		$animator.set_directionv(direction)
 		$animator.play_directional("move")
-		move_and_slide(direction.normalized() * SPEED)
+		var speed = SPEED if not sweating else SWEATING_SPEED
+		move_and_slide(direction * speed)
 		rset("position", position)
 	else:
 		$animator.play_directional("idle")
+
+func _sweat(delta):
+	time_until_death -= delta
+	if time_until_death <= 0:
+		_die()
+
+func _die():
+	action = Action.DYING
+	rset("sweating", false)
+	rpc("play_death_animation")
+	$DeathTimer.start()
+
+remotesync func play_death_animation():
+	$animator.play_directional("death")
 
 func try_interact():
 	match inventory_item:
@@ -89,14 +126,20 @@ func try_pickup():
 		$PickupTimer.start()
 		rpc_unreliable("play_pickup_animation",  closest_plant.get_global_transform().origin - get_global_transform().origin)
 
+func _placement_position():
+	# Move up the position by 4, as the players hitbox is moved up by that amount
+	return get_global_transform().origin + direction * 10 + Vector2(0, -4)
+
 func try_place():
-	# TODO
+	if not Globals.get_level().can_place_flora(_placement_position()):
+		return
+	
 	action = Action.PLACE
 	$PickupTimer.start()
-	rpc_unreliable("play_pickup_animation", Vector2(1, 0))
+	rpc_unreliable("play_pickup_animation", direction)
 
-remotesync func play_pickup_animation(direction: Vector2):
-	$animator.set_directionv(direction)
+remotesync func play_pickup_animation(dir: Vector2):
+	$animator.set_directionv(dir)
 	$animator.play_directional("attack")
 
 func _set_texture_path(new_path: String):
@@ -115,6 +158,10 @@ func _set_item(new_item):
 			$InventoryItem.texture = load(FlowerTextures.get_healthy_texture())
 			$InventoryItem.visible = true
 
+func _set_sweating(is_sweating: bool):
+	sweating = is_sweating
+	$SweatParticles.emitting = sweating
+
 func set_id(new_id: int):
 	set_network_master(new_id)
 	id = new_id
@@ -124,9 +171,9 @@ remotesync func kill():
 
 func finish_place():
 	if inventory_item == Item.TREE:
-		Globals.get_level().rpc("place_tree", get_global_transform().origin)
+		Globals.get_level().rpc("place_flora", _placement_position(), Globals.PlantType.TREE)
 	elif inventory_item == Item.FLOWER:
-		Globals.get_level().rpc("place_flower", get_global_transform().origin)
+		Globals.get_level().rpc("place_flora", _placement_position(), Globals.PlantType.FLOWER)
 	rset("inventory_item", Item.EMPTY)
 
 func finish_pickup_flower():
@@ -145,3 +192,7 @@ func _on_PickupTimer_timeout():
 			finish_pickup_tree()
 	
 	action = Action.IDLE
+
+
+func _on_DeathTimer_timeout():
+	Globals.get_game().rpc("respawn_player", self.id)

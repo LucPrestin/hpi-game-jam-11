@@ -10,26 +10,38 @@ func _ready():
 #func _process(delta):
 #	pass
 
-master func place_flower(position: Vector2):
-	var new_flower = _create_new_flora(position)
-	new_flower.type = Globals.PlantType.FLOWER
-	_spawn_flora(new_flower)
-
-master func place_tree(position: Vector2):
-	var new_tree = _create_new_flora(position)
-	new_tree.type = Globals.PlantType.TREE
-	_spawn_flora(new_tree)
-
-func _spawn_flora(flora):
-	Globals.get_level().get_node("forest").add_child(flora)
-	Globals.get_game().spawn_object_on_clients(flora)
-
-func _create_new_flora(position: Vector2):
+master func place_flora(position: Vector2, type):
+	if not can_place_flora(position):
+		return
+	
 	var new_flora = load("res://flora/flora.tscn").instance()
+	new_flora.name = "planted_flora%s" % $forest.get_children().size()
 	new_flora.position = position
 	new_flora.growth_stage = 1
+	new_flora.type = type
 	
-	return new_flora
+	new_flora.update_texture()
+	
+	Globals.get_level().get_node("forest").add_child(new_flora)
+	Globals.get_game().spawn_object_on_clients(new_flora)
+
+func is_burnt(position: Vector2):
+	var grid_position = position / Globals.PIXEL_PER_TILE
+	return $dirt_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+
+func has_gras(position: Vector2):
+	var grid_position = position / Globals.PIXEL_PER_TILE
+	return $gras_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+
+func can_place_flora(position: Vector2):
+	var circleShape = CircleShape2D.new()
+	circleShape.radius = 2
+	
+	var shapeQuery = Physics2DShapeQueryParameters.new()
+	shapeQuery.set_shape(circleShape)
+	shapeQuery.transform = Transform2D(0, position)
+	
+	return has_gras(position) and not is_burnt(position) and get_world_2d().direct_space_state.collide_shape(shapeQuery, 1).empty()
 
 func get_forest():
 	return $forest.get_children()

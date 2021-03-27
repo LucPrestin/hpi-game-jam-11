@@ -127,3 +127,8 @@ remote func spawn_object(name: String, parent_path: NodePath, filename: String, 
 
 remotesync func unregister_player(player_id: int):
 	$level_switch.remove_child($level_switch.get_node(String(player_id)))
+
+
+master func respawn_player(id: int):
+	rpc("unregister_player", id)
+	spawn_new_player(id)
