@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://resources/tiles/desert.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tiles/dirt_tiles.tres" type="TileSet" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://resources/tiles/river_tiles.tres" type="TileSet" id=6]
 [ext_resource path="res://resources/tiles/goal_tiles.tres" type="TileSet" id=7]
 [ext_resource path="res://spawn/spawn.tscn" type="PackedScene" id=8]
+[ext_resource path="res://obstacles/stone.tscn" type="PackedScene" id=9]
 
 [node name="level" type="Node2D"]
 script = ExtResource( 3 )
@@ -49,7 +50,7 @@ cell_size = Vector2( 16, 16 )
 format = 1
 tile_data = PoolIntArray( 1572879, 0, 65536, 1638415, 0, 131072, 1703951, 0, 131072, 1769487, 0, 131072, 1835023, 0, 131072, 1900559, 0, 131072, 1966095, 0, 131072, 2031631, 0, 196608, 2097165, 1, 0 )
 
-[node name="forest" type="Node2D" parent="."]
+[node name="forest" type="YSort" parent="."]
 
 [node name="tree21" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 109, 447 )
@@ -335,3 +336,8 @@ position = Vector2( 92, 63.5 )
 
 [node name="tree200" parent="forest" instance=ExtResource( 5 )]
 position = Vector2( 56, 86.4966 )
+
+[node name="obstacles" type="Node2D" parent="."]
+
+[node name="stone" parent="obstacles" instance=ExtResource( 9 )]
+position = Vector2( 200, 230.497 )
