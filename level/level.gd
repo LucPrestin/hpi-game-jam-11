@@ -10,11 +10,15 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func can_place_tree(position: Vector2):
+func is_burnt(position: Vector2):
 	var grid_position = position / Globals.PIXEL_PER_TILE
-	var has_gras = $gras_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
-	var is_burnt = $dirt_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
-	
+	return $dirt_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+
+func has_gras(position: Vector2):
+	var grid_position = position / Globals.PIXEL_PER_TILE
+	return $gras_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+
+func can_place_tree(position: Vector2):
 	var circleShape = CircleShape2D.new()
 	circleShape.radius = 2
 	
@@ -22,7 +26,7 @@ func can_place_tree(position: Vector2):
 	shapeQuery.set_shape(circleShape)
 	shapeQuery.transform = Transform2D(0, position)
 	
-	return has_gras and not is_burnt and get_world_2d().direct_space_state.collide_shape(shapeQuery, 1).empty()
+	return has_gras(position) and not is_burnt(position) and get_world_2d().direct_space_state.collide_shape(shapeQuery, 1).empty()
 
 master func place_tree(position: Vector2):
 	if not can_place_tree(position):

@@ -1,16 +1,9 @@
 extends KinematicBody2D
 class_name Player
 
-var id: int setget set_id
-var texture_path: String setget _set_texture_path
-var direction: Vector2 = Vector2(1, 0)
-
-enum Item { EMPTY, TREE }
-var inventory_item = Item.EMPTY setget _set_item
-enum Action { IDLE, PICKUP, PLACE }
-var action = Action.IDLE
-
 const SPEED = 100
+const SWEATING_SPEED = 40
+const TIME_SWEATING = 5
 const PICKUP_DISTANCE = 16 * 1.5
 const texture_paths = [
 	"02",
@@ -20,11 +13,25 @@ const texture_paths = [
 	"28"
 	]
 
+var id: int setget set_id
+var texture_path: String setget _set_texture_path
+var direction: Vector2 = Vector2(1, 0)
+var sweating: bool = false setget _set_sweating
+var time_until_death = TIME_SWEATING
+
+enum Item { EMPTY, TREE }
+var inventory_item = Item.EMPTY setget _set_item
+enum Action { IDLE, PICKUP, PLACE, DYING }
+var action = Action.IDLE
+
+
+
 func _ready():
 	add_to_group("players")
 	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	rset_config("position", MultiplayerAPI.RPC_MODE_REMOTE)
 	rset_config("inventory_item", MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rset_config("sweating", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	
 	$InventoryItem.visible = false
 	
@@ -34,9 +41,22 @@ func _ready():
 	if is_network_master():
 		rset("texture_path", "res://resources/monsters/%s.png" % texture_paths[randi() % texture_paths.size()])
 
-func _physics_process(_delta):
+func _should_sweat():
+	var position = get_global_transform().origin
+	return Globals.get_level().is_burnt(position) or not Globals.get_level().has_gras(position)
+
+func _physics_process(delta):
 	if not is_network_master():
 		return
+	
+	var should_sweat = _should_sweat()
+	if sweating != should_sweat and action != Action.DYING:
+		rset("sweating", should_sweat)
+	
+	if sweating:
+		_sweat(delta)
+	else:
+		time_until_death = TIME_SWEATING
 	
 	if action != Action.IDLE:
 		return
@@ -59,10 +79,25 @@ func _physics_process(_delta):
 		direction = new_direction.normalized()
 		$animator.set_directionv(direction)
 		$animator.play_directional("move")
-		move_and_slide(direction * SPEED)
+		var speed = SPEED if not sweating else SWEATING_SPEED
+		move_and_slide(direction * speed)
 		rset("position", position)
 	else:
 		$animator.play_directional("idle")
+
+func _sweat(delta):
+	time_until_death -= delta
+	if time_until_death <= 0:
+		_die()
+
+func _die():
+	action = Action.DYING
+	rset("sweating", false)
+	rpc("play_death_animation")
+	$DeathTimer.start()
+
+remotesync func play_death_animation():
+	$animator.play_directional("death")
 
 func try_interact():
 	match inventory_item:
@@ -97,10 +132,10 @@ func try_place():
 	
 	action = Action.PLACE
 	$PickupTimer.start()
-	rpc_unreliable("play_pickup_animation", Vector2(1, 0))
+	rpc_unreliable("play_pickup_animation", direction)
 
-remotesync func play_pickup_animation(direction: Vector2):
-	$animator.set_directionv(direction)
+remotesync func play_pickup_animation(dir: Vector2):
+	$animator.set_directionv(dir)
 	$animator.play_directional("attack")
 
 func _set_texture_path(new_path: String):
@@ -114,6 +149,10 @@ func _set_item(new_item):
 			$InventoryItem.visible = false
 		Item.TREE:
 			$InventoryItem.visible = true
+
+func _set_sweating(is_sweating: bool):
+	sweating = is_sweating
+	$SweatParticles.emitting = sweating
 
 func set_id(new_id: int):
 	set_network_master(new_id)
@@ -137,3 +176,7 @@ func _on_PickupTimer_timeout():
 			finish_pickup()
 	
 	action = Action.IDLE
+
+
+func _on_DeathTimer_timeout():
+	Globals.get_game().rpc("respawn_player", self.id)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/player_animator.gd" type="Script" id=2]
@@ -462,6 +462,29 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=17]
 radius = 35.7022
 
+[sub_resource type="Gradient" id=18]
+offsets = PoolRealArray( 0, 0.209302, 0.832558, 1 )
+colors = PoolColorArray( 0.178928, 0.171692, 0.757812, 0.0941176, 0.228816, 0.222836, 0.814941, 1, 0.196801, 0.191849, 0.682129, 1, 0.118759, 0.201117, 0.707031, 0 )
+
+[sub_resource type="GradientTexture" id=19]
+gradient = SubResource( 18 )
+
+[sub_resource type="ParticlesMaterial" id=20]
+emission_shape = 2
+emission_box_extents = Vector3( 30, 5, 1 )
+flag_disable_z = true
+direction = Vector3( 0, -1, 0 )
+spread = 16.65
+gravity = Vector3( 0, 20, 0 )
+initial_velocity = 5.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 5.0
+scale_random = 0.22
+color_ramp = SubResource( 19 )
+hue_variation = 0.02
+hue_variation_random = 1.0
+
 [node name="player" type="KinematicBody2D"]
 scale = Vector2( 0.2, 0.2 )
 script = ExtResource( 1 )
@@ -477,7 +500,7 @@ scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 5 )
 vframes = 16
 hframes = 4
-frame = 43
+frame = 60
 
 [node name="animator" type="AnimationPlayer" parent="."]
 anims/attack_down = SubResource( 1 )
@@ -503,7 +526,7 @@ zoom = Vector2( 0.3, 0.3 )
 script = ExtResource( 4 )
 
 [node name="sync" parent="." instance=ExtResource( 3 )]
-synced_properties = PoolStringArray( "position", "id", "texture_path", "inventory_item" )
+synced_properties = PoolStringArray( "position", "id", "texture_path", "inventory_item", "sweating" )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -20 )
@@ -512,4 +535,16 @@ shape = SubResource( 17 )
 [node name="PickupTimer" type="Timer" parent="."]
 wait_time = 0.235
 one_shot = true
+
+[node name="SweatParticles" type="Particles2D" parent="."]
+position = Vector2( -1.11362, -65.71 )
+emitting = false
+amount = 20
+lifetime = 2.0
+process_material = SubResource( 20 )
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 [connection signal="timeout" from="PickupTimer" to="." method="_on_PickupTimer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_DeathTimer_timeout"]
