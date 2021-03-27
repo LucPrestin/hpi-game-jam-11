@@ -3,6 +3,7 @@ class_name Player
 
 var id: int setget set_id
 var texture_path: String setget _set_texture_path
+var direction: Vector2 = Vector2(1, 0)
 
 enum Item { EMPTY, TREE }
 var inventory_item = Item.EMPTY setget _set_item
@@ -55,6 +56,7 @@ func _physics_process(_delta):
 		direction += Vector2(1, 0)
 	
 	if not direction.is_equal_approx(Vector2(0, 0)):
+		self.direction = direction.normalized()
 		$animator.set_directionv(direction)
 		$animator.play_directional("move")
 		move_and_slide(direction.normalized() * SPEED)
@@ -85,8 +87,14 @@ func try_pickup():
 		$PickupTimer.start()
 		rpc_unreliable("play_pickup_animation",  closest_tree.get_global_transform().origin - get_global_transform().origin)
 
+func _placement_position():
+	# Move up the position by 4, as the players hitbox is moved up by that amount
+	return get_global_transform().origin + direction * 10 + Vector2(0, -4)
+
 func try_place():
-	# TODO
+	if not Globals.get_level().can_place_tree(_placement_position()):
+		return
+	
 	action = Action.PLACE
 	$PickupTimer.start()
 	rpc_unreliable("play_pickup_animation", Vector2(1, 0))
@@ -116,7 +124,7 @@ remotesync func kill():
 
 func finish_place():
 	rset("inventory_item", Item.EMPTY)
-	Globals.get_level().rpc("place_tree", get_global_transform().origin)
+	Globals.get_level().rpc("place_tree", _placement_position())
 
 func finish_pickup():
 	rset("inventory_item", Item.TREE)

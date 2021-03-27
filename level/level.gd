@@ -10,11 +10,30 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func can_place_tree(position: Vector2):
+	var grid_position = position / Globals.PIXEL_PER_TILE
+	var has_gras = $gras_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+	var is_burnt = $dirt_layer.get_cellv(grid_position) != TileMap.INVALID_CELL
+	
+	var circleShape = CircleShape2D.new()
+	circleShape.radius = 2
+	
+	var shapeQuery = Physics2DShapeQueryParameters.new()
+	shapeQuery.set_shape(circleShape)
+	shapeQuery.transform = Transform2D(0, position)
+	
+	return has_gras and not is_burnt and get_world_2d().direct_space_state.collide_shape(shapeQuery, 1).empty()
+
 master func place_tree(position: Vector2):
+	if not can_place_tree(position):
+		return
+	
+	var forest_node = Globals.get_level().get_node("forest")
 	var new_tree = load("res://flora/tree.tscn").instance()
 	new_tree.position = position
 	new_tree.growth_stage = 1
-	Globals.get_level().get_node("forest").add_child(new_tree)
+	new_tree.name = "planted_tree%s" % forest_node.get_children().size()
+	forest_node.add_child(new_tree)
 	
 	Globals.get_game().spawn_object_on_clients(new_tree)
 
