@@ -46,12 +46,11 @@ func can_place_flora(position: Vector2):
 func get_forest():
 	return $forest.get_children()
 
-func get_surrounding_trees(position: Vector2):
+func get_surrounding_trees(position: Vector2, max_distance: float):
 	var surrounding_trees = []
 	
 	for tree in $forest.get_children():
-		var tree_position = tree.get_position() / Globals.PIXEL_PER_TILE
-		if position.distance_to(tree_position) <= SURROUNDING_TILE_RANGE:
+		if position.distance_to(tree.position) <= max_distance:
 			surrounding_trees.append(tree)
 	
 	return surrounding_trees
