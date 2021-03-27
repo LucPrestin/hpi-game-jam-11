@@ -20,6 +20,11 @@ __meta__ = {
 "_edit_vertical_guides_": [  ]
 }
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+volume_db = -20.0
+autoplay = true
+
 [node name="abyss_layer" type="TileMap" parent="."]
 position = Vector2( 2, 0 )
 tile_set = ExtResource( 11 )
@@ -758,8 +763,3 @@ position = Vector2( 544, 454 )
 
 [node name="small_stone5" parent="obstacles" instance=ExtResource( 10 )]
 position = Vector2( 688, 120.997 )
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 13 )
-volume_db = -10.0
-autoplay = true

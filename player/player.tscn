@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/player_animator.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://player_old/local_camera.gd" type="Script" id=4]
 [ext_resource path="res://resources/monsters/bear.png" type="Texture" id=5]
 [ext_resource path="res://resources/flora/tree_2.png" type="Texture" id=6]
+[ext_resource path="res://resources/sounds/Wilhelm_Scream.ogg" type="AudioStream" id=7]
 
 [sub_resource type="Animation" id=1]
 length = 0.235294
@@ -134,6 +135,24 @@ tracks/4/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
 }
+tracks/5/type = "audio"
+tracks/5/path = NodePath("SoundPlayer2D")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 7 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": null
+} ],
+"times": PoolRealArray( 0, 1.2 )
+}
 
 [sub_resource type="Animation" id=6]
 length = 2.0
@@ -197,6 +216,24 @@ tracks/4/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/5/type = "audio"
+tracks/5/path = NodePath("SoundPlayer2D")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 7 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": null
+} ],
+"times": PoolRealArray( 0, 1.2 )
 }
 
 [sub_resource type="Animation" id=7]
@@ -262,6 +299,24 @@ tracks/4/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
 }
+tracks/5/type = "audio"
+tracks/5/path = NodePath("SoundPlayer2D")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 7 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": null
+} ],
+"times": PoolRealArray( 0, 1.2 )
+}
 
 [sub_resource type="Animation" id=8]
 length = 2.0
@@ -325,6 +380,24 @@ tracks/4/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/5/type = "audio"
+tracks/5/path = NodePath("SoundPlayer2D")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 7 )
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": null
+} ],
+"times": PoolRealArray( 0, 1.2 )
 }
 
 [sub_resource type="Animation" id=9]
@@ -500,7 +573,7 @@ scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 5 )
 vframes = 16
 hframes = 4
-frame = 60
+frame = 28
 
 [node name="animator" type="AnimationPlayer" parent="."]
 anims/attack_down = SubResource( 1 )
@@ -546,5 +619,8 @@ process_material = SubResource( 20 )
 [node name="DeathTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
+
+[node name="SoundPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -10.0
 [connection signal="timeout" from="PickupTimer" to="." method="_on_PickupTimer_timeout"]
 [connection signal="timeout" from="DeathTimer" to="." method="_on_DeathTimer_timeout"]
