@@ -3,7 +3,7 @@ class_name Player
 
 const SPEED = 100
 const SWEATING_SPEED = 40
-const TIME_SWEATING = 5
+const TIME_SWEATING = 1
 const PICKUP_DISTANCE = 16 * 1.5
 const texture_paths = [
 	"02",
