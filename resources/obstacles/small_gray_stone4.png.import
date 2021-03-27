@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/small_stone1.png-91c8afb837584fa20a99194aec21a676.stex"
+path="res://.import/small_gray_stone4.png-f991cd16743941a68e0143b4561ef82b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/obstacles/small_stone1.png"
-dest_files=[ "res://.import/small_stone1.png-91c8afb837584fa20a99194aec21a676.stex" ]
+source_file="res://resources/obstacles/small_gray_stone4.png"
+dest_files=[ "res://.import/small_gray_stone4.png-f991cd16743941a68e0143b4561ef82b.stex" ]
 
 [params]
 
