@@ -70,12 +70,8 @@ func _set_tile(tileMap: TileMap, position: Vector2):
 	tileMap.update_bitmask_area(position)
 
 func win():
-	pass
+	print("Win, hurray")
 
 master func check_win_condition():
-	var all_players_in_goal_region = true
-	for child in get_children():
-		print(child)
-	
-	if all_players_in_goal_region:
+	if len(Globals.get_players()) == len($goal.get_overlapping_bodies()):
 		win()
