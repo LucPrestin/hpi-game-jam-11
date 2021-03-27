@@ -45,21 +45,21 @@ func _physics_process(_delta):
 		try_interact()
 		return
 	
-	var direction =  Vector2(0, 0)
+	var new_direction =  Vector2(0, 0)
 	if Input.is_action_pressed("move_up"):
-		direction += Vector2(0, -1)
+		new_direction += Vector2(0, -1)
 	if Input.is_action_pressed("move_down"):
-		direction += Vector2(0, 1)
+		new_direction += Vector2(0, 1)
 	if Input.is_action_pressed("move_left"):
-		direction += Vector2(-1, 0)
+		new_direction += Vector2(-1, 0)
 	if Input.is_action_pressed("move_right"):
-		direction += Vector2(1, 0)
+		new_direction += Vector2(1, 0)
 	
-	if not direction.is_equal_approx(Vector2(0, 0)):
-		self.direction = direction.normalized()
+	if not new_direction.is_equal_approx(Vector2(0, 0)):
+		direction = new_direction.normalized()
 		$animator.set_directionv(direction)
 		$animator.play_directional("move")
-		move_and_slide(direction.normalized() * SPEED)
+		move_and_slide(direction * SPEED)
 		rset("position", position)
 	else:
 		$animator.play_directional("idle")
