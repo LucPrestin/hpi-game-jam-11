@@ -152,10 +152,10 @@ func _set_item(new_item):
 		Item.EMPTY:
 			$InventoryItem.visible = false
 		Item.TREE:
-			$InventoryItem.texture = load(TreeTextures.get_healthy_texture())
+			$InventoryItem.texture = load(TreeInformation.get_healthy_texture())
 			$InventoryItem.visible = true
 		Item.FLOWER:
-			$InventoryItem.texture = load(FlowerTextures.get_healthy_texture())
+			$InventoryItem.texture = load(FlowerInformation.get_healthy_texture())
 			$InventoryItem.visible = true
 
 func _set_sweating(is_sweating: bool):

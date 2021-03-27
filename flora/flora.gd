@@ -58,21 +58,21 @@ func _process_burning(delta):
 
 func _burnt():
 	rset("state", FloraState.BURNT)
-	rset("texture_path", _textures().get_burnt_texture())
+	rset("texture_path", _information().get_burnt_texture())
 
-func _textures():
+func _information():
 	match type:
 		Globals.PlantType.TREE:
-			return TreeTextures
+			return TreeInformation
 		Globals.PlantType.FLOWER:
-			return FlowerTextures
+			return FlowerInformation
 
 func update_texture():
 	match state:
 		FloraState.BURNT:
-			_set_texture_path(_textures().get_burnt_texture())
+			_set_texture_path(_information().get_burnt_texture())
 		FloraState.GROWING, FloraState.BURNING:
-			_set_texture_path(_textures().get_healthy_texture())
+			_set_texture_path(_information().get_healthy_texture())
 
 func _set_plant_type(new_plant_type):
 	type = new_plant_type

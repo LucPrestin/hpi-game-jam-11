@@ -1,9 +1,9 @@
 extends Object
-class_name FlowerTextures
+class_name TreeInformation
 
 static func get_healthy_texture():
-	var texture_id = randi() % 12 + 1
-	return "res://resources/flora/flower_%s.png" % texture_id
+	var texture_id = randi() % 10 + 1
+	return "res://resources/flora/tree_%s.png" % texture_id
 
 static func get_burnt_texture():
 	var texture_id = randi() % 5 + 1
