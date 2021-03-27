@@ -1,10 +1,14 @@
 extends StaticBody2D
 class_name Flora
 
-const TIME_BETWEEN_SPREADINGS = 5
+const TIME_BETWEEN_SPREADINGS = 6
+const MAX_SPREAD_DISTANCE = 7
 const TIME_BURNING = 30
 const TIME_PER_STAGE = 3
 const MAX_GROWTH_STAGE = 3
+
+const MAX_SYMBIOSIS_RADIUS = 5
+const MAX_SYMBIOSIS_NUMBER = 7
 const GRAS_RADIUS = 3.5
 const BURNT_RADIUS = 3.5
 
@@ -56,7 +60,7 @@ func _process_burning(delta):
 	time_until_fire_spreads -= delta
 	time_until_burnt -= delta
 	if time_until_fire_spreads <= 0:
-		time_until_fire_spreads = TIME_BETWEEN_SPREADINGS
+		time_until_fire_spreads = TIME_BETWEEN_SPREADINGS + rng.randf_range(-1, 1)
 		_spread_fire()
 	if time_until_burnt <= 0:
 		_burnt()
@@ -92,13 +96,21 @@ func can_pick_up():
 	return state == FloraState.GROWING and growth_stage == MAX_GROWTH_STAGE
 
 func _spread_fire():
-	var max_burning_distance = 5 * Globals.PIXEL_PER_TILE
-	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position(), max_burning_distance)
+	var closest_tree = null
+	var closest_distance = INF
 	
-	for tree in surrounding_trees:
-		var distance_proportion = tree.position.distance_to(position) / max_burning_distance
-		if rng.randf_range(0, 1) > distance_proportion:
-			tree.start_burning()
+	for tree in Globals.get_level().get_forest():
+		var distance = get_position().distance_squared_to(tree.get_position())
+		if tree.state == FloraState.GROWING and distance < closest_distance:
+			closest_tree = tree
+			closest_distance = distance
+	closest_distance = sqrt(closest_distance)
+	
+	var max_burning_distance = MAX_SPREAD_DISTANCE * Globals.PIXEL_PER_TILE
+	var distance_proportion = closest_distance / max_burning_distance
+	
+	if closest_distance < max_burning_distance and rng.randf_range(-1, 1) < distance_proportion:
+		closest_tree.start_burning()
 
 func _set_growth_stage(new_stage: int):
 	growth_stage = new_stage
@@ -110,6 +122,10 @@ func _set_state(new_state):
 	_set_surrounding_tiles()
 	$Particles2D.emitting = state == FloraState.BURNING
 
+func _gras_spread_radius():
+	var symbiosis_count = Globals.get_level().get_surrounding_trees(get_position(), MAX_SYMBIOSIS_RADIUS * Globals.PIXEL_PER_TILE).size()
+	return min(GRAS_RADIUS, GRAS_RADIUS * symbiosis_count / MAX_SYMBIOSIS_NUMBER)
+
 func _set_surrounding_tiles():
 	if Globals.get_level() == null:
 		return
@@ -119,7 +135,7 @@ func _set_surrounding_tiles():
 	
 	var pos = get_position() / Globals.PIXEL_PER_TILE
 		
-	var radius = BURNT_RADIUS if state == FloraState.BURNT else GRAS_RADIUS
+	var radius = BURNT_RADIUS if state == FloraState.BURNT else _gras_spread_radius()
 	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNT else Globals.Tile.GRAS
 	for x_offset in range(-radius, radius):
 		for y_offset in range(-radius, radius):
