@@ -1,12 +1,12 @@
 extends StaticBody2D
 class_name Flora
 
-const TIME_BETWEEN_SPREADINGS = 7
-const TIME_BURNING = 10
+const TIME_BETWEEN_SPREADINGS = 5
+const TIME_BURNING = 30
 const TIME_PER_STAGE = 3
 const MAX_GROWTH_STAGE = 3
-const GRAS_RADIUS = 3
-const BURNT_RADIUS = 3
+const GRAS_RADIUS = 3.5
+const BURNT_RADIUS = 3.5
 
 export var growth_stage : int = 3 setget _set_growth_stage
 
@@ -21,6 +21,8 @@ var time_until_burnt = TIME_BURNING
 
 var texture_path: String setget _set_texture_path
 
+var rng = RandomNumberGenerator.new()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_network_master(1)
@@ -29,6 +31,9 @@ func _ready():
 	rset_config("texture_path", MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	_set_growth_stage(growth_stage)
 	_set_state(state)
+	
+	rng.randomize()
+	
 	if is_network_master():
 		update_texture()
 
@@ -76,6 +81,8 @@ func update_texture():
 
 func _set_plant_type(new_plant_type):
 	type = new_plant_type
+	set_collision_mask_bit(0, _information().can_collide())
+	set_collision_layer_bit(0, _information().can_collide())
 
 func start_burning():
 	if is_network_master() and state == FloraState.GROWING:
@@ -85,10 +92,13 @@ func can_pick_up():
 	return state == FloraState.GROWING and growth_stage == MAX_GROWTH_STAGE
 
 func _spread_fire():
-	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position() / Globals.PIXEL_PER_TILE)
+	var max_burning_distance = 5 * Globals.PIXEL_PER_TILE
+	var surrounding_trees = Globals.get_level().get_surrounding_trees(get_position(), max_burning_distance)
 	
 	for tree in surrounding_trees:
-		tree.start_burning()
+		var distance_proportion = tree.position.distance_to(position) / max_burning_distance
+		if rng.randf_range(0, 1) > distance_proportion:
+			tree.start_burning()
 
 func _set_growth_stage(new_stage: int):
 	growth_stage = new_stage
@@ -113,7 +123,9 @@ func _set_surrounding_tiles():
 	var tile_type = Globals.Tile.DIRT if state == FloraState.BURNT else Globals.Tile.GRAS
 	for x_offset in range(-radius, radius):
 		for y_offset in range(-radius, radius):
-			Globals.get_level().set_tile(pos + Vector2(x_offset, y_offset), tile_type)
+			var offset = Vector2(x_offset, y_offset)
+			if offset.length() <= radius:
+				Globals.get_level().set_tile(pos + offset, tile_type)
 
 func _set_texture_path(path: String):
 	texture_path = path
