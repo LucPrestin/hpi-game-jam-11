@@ -70,7 +70,7 @@ func _set_tile(tileMap: TileMap, position: Vector2):
 	tileMap.update_bitmask_area(position)
 
 func win():
-	print("Win, hurray")
+	Globals.get_game().switch_level("res://level/win_screen.tscn")
 
 master func check_win_condition():
 	for player in Globals.get_players():
