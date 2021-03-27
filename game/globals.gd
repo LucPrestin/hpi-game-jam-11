@@ -7,5 +7,6 @@ func get_game():
 	return get_tree().get_root().find_node("game", true, false)
 
 enum Tile { GRAS, DIRT }
+enum PlantType { TREE, FLOWER }
 
 const PIXEL_PER_TILE = 16

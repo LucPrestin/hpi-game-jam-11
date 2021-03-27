@@ -2,19 +2,19 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tree_01.png-171a5c039e8a15bc9531bc60fa863221.stex"
+path="res://.import/flower_11.png-f9e0755338dbcf0e32ca71a0fc322ac1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/flora/tree_01.png"
-dest_files=[ "res://.import/tree_01.png-171a5c039e8a15bc9531bc60fa863221.stex" ]
+source_file="res://resources/flora/flower_11.png"
+dest_files=[ "res://.import/flower_11.png-f9e0755338dbcf0e32ca71a0fc322ac1.stex" ]
 
 [params]
 
-compress/mode=3
+compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0

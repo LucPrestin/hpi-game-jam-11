@@ -4,9 +4,9 @@ class_name Player
 var id: int setget set_id
 var texture_path: String setget _set_texture_path
 
-enum Item { EMPTY, TREE }
+enum Item { EMPTY, TREE, FLOWER }
 var inventory_item = Item.EMPTY setget _set_item
-enum Action { IDLE, PICKUP, PLACE }
+enum Action { IDLE, PICKUP_TREE, PICKUP_FLOWER, PLACE }
 var action = Action.IDLE
 
 const SPEED = 100
@@ -66,24 +66,28 @@ func try_interact():
 	match inventory_item:
 		Item.EMPTY:
 			try_pickup()
-		Item.TREE:
+		Item.TREE, Item.FLOWER:
 			try_place()
 
 func try_pickup():
-	var closest_tree = null
+	var closest_plant = null
 	var closest_distance = INF
 	
-	for tree in Globals.get_level().get_forest():
-		var distance = get_global_transform().origin.distance_squared_to(tree.get_global_transform().origin)
-		if distance < closest_distance and tree.can_pick_up():
-			closest_tree = tree
+	for plant in Globals.get_level().get_forest():
+		var distance = get_global_transform().origin.distance_squared_to(plant.get_global_transform().origin)
+		if distance < closest_distance and plant.can_pick_up():
+			closest_plant = plant
 			closest_distance = distance
 	closest_distance = sqrt(closest_distance)
 	
 	if closest_distance < PICKUP_DISTANCE:
-		action = Action.PICKUP
+		match closest_plant.type:
+			Globals.PlantType.FLOWER:
+				action = Action.PICKUP_FLOWER
+			Globals.PlantType.TREE:
+				action = Action.PICKUP_TREE
 		$PickupTimer.start()
-		rpc_unreliable("play_pickup_animation",  closest_tree.get_global_transform().origin - get_global_transform().origin)
+		rpc_unreliable("play_pickup_animation",  closest_plant.get_global_transform().origin - get_global_transform().origin)
 
 func try_place():
 	# TODO
@@ -105,6 +109,10 @@ func _set_item(new_item):
 		Item.EMPTY:
 			$InventoryItem.visible = false
 		Item.TREE:
+			$InventoryItem.texture = load(TreeTextures.get_healthy_texture())
+			$InventoryItem.visible = true
+		Item.FLOWER:
+			$InventoryItem.texture = load(FlowerTextures.get_healthy_texture())
 			$InventoryItem.visible = true
 
 func set_id(new_id: int):
@@ -115,17 +123,25 @@ remotesync func kill():
 	hide()
 
 func finish_place():
+	if inventory_item == Item.TREE:
+		Globals.get_level().rpc("place_tree", get_global_transform().origin)
+	elif inventory_item == Item.FLOWER:
+		Globals.get_level().rpc("place_flower", get_global_transform().origin)
 	rset("inventory_item", Item.EMPTY)
-	Globals.get_level().rpc("place_tree", get_global_transform().origin)
 
-func finish_pickup():
+func finish_pickup_flower():
+	rset("inventory_item", Item.FLOWER)
+
+func finish_pickup_tree():
 	rset("inventory_item", Item.TREE)
 
 func _on_PickupTimer_timeout():
 	match action:
 		Action.PLACE:
 			finish_place()
-		Action.PICKUP:
-			finish_pickup()
+		Action.PICKUP_FLOWER:
+			finish_pickup_flower()
+		Action.PICKUP_TREE:
+			finish_pickup_tree()
 	
 	action = Action.IDLE

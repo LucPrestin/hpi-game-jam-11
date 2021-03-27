@@ -10,13 +10,26 @@ func _ready():
 #func _process(delta):
 #	pass
 
+master func place_flower(position: Vector2):
+	var new_flower = _create_new_flora(position)
+	new_flower.type = Globals.PlantType.FLOWER
+	_spawn_flora(new_flower)
+
 master func place_tree(position: Vector2):
-	var new_tree = load("res://flora/tree.tscn").instance()
-	new_tree.position = position
-	new_tree.growth_stage = 1
-	Globals.get_level().get_node("forest").add_child(new_tree)
+	var new_tree = _create_new_flora(position)
+	new_tree.type = Globals.PlantType.TREE
+	_spawn_flora(new_tree)
+
+func _spawn_flora(flora):
+	Globals.get_level().get_node("forest").add_child(flora)
+	Globals.get_game().spawn_object_on_clients(flora)
+
+func _create_new_flora(position: Vector2):
+	var new_flora = load("res://flora/flora.tscn").instance()
+	new_flora.position = position
+	new_flora.growth_stage = 1
 	
-	Globals.get_game().spawn_object_on_clients(new_tree)
+	return new_flora
 
 func get_forest():
 	return $forest.get_children()
