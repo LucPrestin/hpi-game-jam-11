@@ -1,8 +1,11 @@
 extends Area2D
 
 
-export var next_level : String = "res://level/luc.tscn"
+export var next_level : String = "res://level/level.tscn"
 
 func _on_StartArea_body_entered(body):
-	if self.get_overlapping_bodies().size() == Globals.get_players().size():
-		Globals.get_game().switch_level(next_level)
+	for player in Globals.get_players():
+		if !self.overlaps_body(player):
+			return
+	
+	Globals.get_game().switch_level(next_level)

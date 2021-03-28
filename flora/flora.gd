@@ -121,6 +121,12 @@ func _set_state(new_state):
 	state = new_state
 	_set_surrounding_tiles()
 	$Particles2D.emitting = state == FloraState.BURNING
+	if state == FloraState.BURNING:
+		#$AudioStreamPlayer2D.play()
+		pass
+	else:
+		#$AudioStreamPlayer2D.stop()
+		pass
 
 func _gras_spread_radius():
 	var symbiosis_count = Globals.get_level().get_surrounding_trees(get_position(), MAX_SYMBIOSIS_RADIUS * Globals.PIXEL_PER_TILE).size()

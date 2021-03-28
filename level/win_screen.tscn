@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://resources/tiles/desert.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tiles/dirt_tiles.tres" type="TileSet" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://obstacles/small_stone.tscn" type="PackedScene" id=10]
 [ext_resource path="res://resources/tiles/dark_sand_tiles.tres" type="TileSet" id=11]
 [ext_resource path="res://resources/tiles/cliff_tiles.tres" type="TileSet" id=12]
+[ext_resource path="res://resources/sounds/Ancient_Game_Spiritual_Elven_Woods.ogg" type="AudioStream" id=13]
 
 [node name="level" type="Node2D"]
 script = ExtResource( 3 )
@@ -418,3 +419,8 @@ position = Vector2( 544, 454 )
 
 [node name="spawn" parent="." instance=ExtResource( 8 )]
 position = Vector2( 240, 368 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+volume_db = -10.0
+autoplay = true

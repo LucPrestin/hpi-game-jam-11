@@ -65,3 +65,5 @@ amount = 5
 lifetime = 5.0
 process_material = SubResource( 5 )
 texture = ExtResource( 4 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
