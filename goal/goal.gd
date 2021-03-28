@@ -24,3 +24,10 @@ func _set_goal_area_radius(new_radius):
 	goal_area_radius = new_radius
 	($WinArea/WinCollisionArea.shape as CircleShape2D).radius = (goal_area_radius + 0.5) * Globals.PIXEL_PER_TILE
 	$WinArea.update()
+
+func _on_WinAreaShape_draw():
+	$WinAreaShape.draw_circle(
+		$WinArea/WinCollisionArea.get_position(), 
+		(goal_area_radius + 0.5) * Globals.PIXEL_PER_TILE, 
+		Color.forestgreen
+	)
