@@ -8,4 +8,4 @@ func _on_StartArea_body_entered(body):
 		if !self.overlaps_body(player):
 			return
 	
-	Globals.get_game().switch_level(next_level)
+	Globals.get_game().call_deferred("switch_level", next_level)
