@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Ancient_Game_Harvest_Plant_2.ogg-d6799f9d42387c3fc400862277d61bdb.oggstr"
+
+[deps]
+
+source_file="res://resources/sounds/Ancient_Game_Harvest_Plant_2.ogg"
+dest_files=[ "res://.import/Ancient_Game_Harvest_Plant_2.ogg-d6799f9d42387c3fc400862277d61bdb.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

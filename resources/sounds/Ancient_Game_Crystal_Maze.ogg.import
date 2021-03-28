@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Ancient_Game_Crystal_Maze.ogg-82c45019fa4651ab2f8baf6617015bc1.oggstr"
+
+[deps]
+
+source_file="res://resources/sounds/Ancient_Game_Crystal_Maze.ogg"
+dest_files=[ "res://.import/Ancient_Game_Crystal_Maze.ogg-82c45019fa4651ab2f8baf6617015bc1.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
